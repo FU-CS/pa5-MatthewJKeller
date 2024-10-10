@@ -50,10 +50,94 @@ interface ArrayBasedBinaryTree {
     void delete(int element);
 }
 
-// // Uncomment the following code to implement the BinaryTreeArray class
-// public class BinaryTreeArray implements ArrayBasedBinaryTree{
+/**
+ * BinaryTreeArray
+ */
+public class BinaryTreeArray implements ArrayBasedBinaryTree {
 
-//     public static void main(String[] args){
+    int size;
+    int[] data;
+    int capacity;
 
-//     }   
-// }
+    public BinaryTreeArray(int capacity) {
+        this.size = 0;
+        this.capacity = capacity;
+        this.data = new int[capacity];
+    }
+
+    public void insert(int element) {
+        if (this.size < this.capacity) {
+            this.data[this.size] = element;
+            this.size++;
+        }
+    }
+
+    public String levelOrder() {
+        String str = "";
+        for (int i = 0; i < this.size; i++) {
+            str = str + data[i] + " ";
+        }
+        return str;
+    }
+
+    public String inOrder() {
+        return this.inOrderHelper(0);
+    }
+
+    private String inOrderHelper(int index) {
+        if (index >= this.size || data[index] == 0) {
+            return "";
+        }
+        return this.inOrderHelper(2*index + 1) + data[index] + " " + this.inOrderHelper(2*index + 2);
+    }
+
+    public String preOrder() {
+        return this.preOrderHelper(0);
+    }
+
+    private String preOrderHelper(int index) {
+        if (index >= this.size || data[index] == 0) {
+            return "";
+        }
+        return data[index] + " " + this.preOrderHelper(2 * index + 1) + this.preOrderHelper(2*index + 2);
+    }
+
+    public String postOrder() {
+        return this.postOrderHelper(0);
+    }
+
+    private String postOrderHelper(int index) {
+        if (index >= this.size || data[index] == 0) {
+            return "";
+        }
+        return this.postOrderHelper(2*index + 1) + this.postOrderHelper(2*index +2) +data[index] + " ";
+    }
+
+    public int longestPath() {
+        if (this.size == 0) {
+            return 0;
+        }
+        else{
+            return longestPathHelper(0);
+        }
+    }
+
+    private int longestPathHelper(int index) {
+        if (index >=this.size || data[index] == 0) {
+            return -1;
+        }
+        int leftPath = longestPathHelper(2*index +1);
+        return leftPath +1;
+    }
+
+    public void delete(int element) {
+        for (int i = 0; i < this.size; i++) {
+            if (data[i] == element) {
+                data[i] = data[this.size- 1];
+                data[this.size - 1] = 0;
+                this.size--;
+                break;
+            }
+        }
+    }
+}
